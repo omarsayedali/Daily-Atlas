@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#181916" />
+    <title>Daily Atlas</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="icon-sprite" aria-hidden="true">
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 13 4 4L19 7" />
+      </symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24">
+        <path d="M8 3v4M16 3v4M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+      </symbol>
+      <symbol id="icon-clock" viewBox="0 0 24 24">
+        <path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </symbol>
+      <symbol id="icon-bed" viewBox="0 0 24 24">
+        <path d="M4 11V5M4 17v2M20 17v2M4 13h16a2 2 0 0 1 2 2v2H2v-4h2Zm2-2h5V8a2 2 0 0 0-2-2H6v5Z" />
+      </symbol>
+      <symbol id="icon-fork" viewBox="0 0 24 24">
+        <path d="M6 3v8M3 3v8M9 3v8M3 11h6M6 11v10M16 3v18M16 3c3 2 4 5 4 8 0 2-1 4-4 5" />
+      </symbol>
+      <symbol id="icon-dumbbell" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M3 8l5-5M16 21l5-5M4 11l7-7M13 20l7-7" />
+      </symbol>
+      <symbol id="icon-book" viewBox="0 0 24 24">
+        <path d="M4 5a3 3 0 0 1 3-3h13v17H7a3 3 0 0 0-3 3V5Zm0 0v17M8 6h8M8 10h8" />
+      </symbol>
+      <symbol id="icon-briefcase" viewBox="0 0 24 24">
+        <path d="M10 6V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1M3 9h18M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" />
+      </symbol>
+      <symbol id="icon-water" viewBox="0 0 24 24">
+        <path d="M12 3s7 7 7 12a7 7 0 0 1-14 0c0-5 7-12 7-12Z" />
+      </symbol>
+      <symbol id="icon-spark" viewBox="0 0 24 24">
+        <path d="m12 3 2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z" />
+      </symbol>
+      <symbol id="icon-list" viewBox="0 0 24 24">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </symbol>
+      <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+      </symbol>
+      <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+        <path d="m15 18-6-6 6-6" />
+      </symbol>
+      <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+        <path d="m9 18 6-6-6-6" />
+      </symbol>
+      <symbol id="icon-save" viewBox="0 0 24 24">
+        <path d="M5 3h12l2 2v16H5V3Zm3 0v6h8V3M8 21v-7h8v7" />
+      </symbol>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Daily Atlas navigation">
+        <div class="brand">
+          <span class="brand-mark">DA</span>
+          <div>
+            <strong>Daily Atlas</strong>
+            <span id="activeDayLabel">Today</span>
+          </div>
+        </div>
+
+        <nav class="nav-pills" aria-label="Sections">
+          <a href="#overview" class="nav-pill is-active">
+            <svg><use href="#icon-spark"></use></svg>
+            Overview
+          </a>
+          <a href="#timeline" class="nav-pill">
+            <svg><use href="#icon-clock"></use></svg>
+            Timeline
+          </a>
+          <a href="#tasks" class="nav-pill">
+            <svg><use href="#icon-list"></use></svg>
+            Tasks
+          </a>
+          <a href="#body" class="nav-pill">
+            <svg><use href="#icon-dumbbell"></use></svg>
+            Body
+          </a>
+          <a href="#focus" class="nav-pill">
+            <svg><use href="#icon-book"></use></svg>
+            Focus
+          </a>
+        </nav>
+
+        <div class="sidebar-status">
+          <span>Completion</span>
+          <strong id="railCompletion">0%</strong>
+          <div class="mini-meter"><span id="railMeter"></span></div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="date-controls" aria-label="Date controls">
+            <button class="icon-button" id="prevDay" type="button" aria-label="Previous day" title="Previous day">
+              <svg><use href="#icon-chevron-left"></use></svg>
+            </button>
+            <label class="date-field">
+              <svg><use href="#icon-calendar"></use></svg>
+              <input id="datePicker" type="date" />
+            </label>
+            <button class="icon-button" id="nextDay" type="button" aria-label="Next day" title="Next day">
+              <svg><use href="#icon-chevron-right"></use></svg>
+            </button>
+            <button class="text-button" id="todayButton" type="button">Today</button>
+          </div>
+
+          <button class="primary-button" id="openCapture" type="button">
+            <svg><use href="#icon-plus"></use></svg>
+            Capture
+          </button>
+        </header>
+
+        <section class="hero-band" id="overview">
+          <div class="hero-copy">
+            <span class="eyebrow" id="weekdayLabel">Saturday</span>
+            <h1 id="heroDate">June 13</h1>
+            <div class="hero-meta">
+              <span id="focusMinutes">0m focus</span>
+              <span id="trainingMinutes">0m training</span>
+              <span id="sleepAmount">0h sleep</span>
+            </div>
+          </div>
+
+          <div class="score-panel" aria-label="Daily score">
+            <div class="score-ring" id="scoreRing">
+              <span id="scoreValue">0</span>
+            </div>
+            <div>
+              <strong>Daily Score</strong>
+              <span id="scoreLabel">Ready</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="metrics-grid" aria-label="Daily metrics">
+          <article class="metric-tile accent-green">
+            <span>Tasks</span>
+            <strong id="taskMetric">0/0</strong>
+            <small id="taskMetricLabel">No tasks</small>
+          </article>
+          <article class="metric-tile accent-coral">
+            <span>Water</span>
+            <strong id="waterMetric">0</strong>
+            <small>glasses</small>
+          </article>
+          <article class="metric-tile accent-blue">
+            <span>Energy</span>
+            <strong id="energyMetric">5</strong>
+            <small>/10</small>
+          </article>
+          <article class="metric-tile accent-gold">
+            <span>Mood</span>
+            <strong id="moodMetric">5</strong>
+            <small>/10</small>
+          </article>
+        </section>
+
+        <div class="content-grid">
+          <section class="tool-panel quick-panel" aria-labelledby="quickTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Fast Entry</span>
+                <h2 id="quickTitle">Quick Capture</h2>
+              </div>
+            </div>
+
+            <form class="quick-form" id="quickForm">
+              <label>
+                <span>Type</span>
+                <select id="quickType">
+                  <option value="task">Task</option>
+                  <option value="schedule">Schedule</option>
+                  <option value="meal">Meal</option>
+                  <option value="workout">Workout</option>
+                  <option value="focus">Study / Work</option>
+                  <option value="activity">Other Activity</option>
+                </select>
+              </label>
+              <label class="wide">
+                <span>Title</span>
+                <input id="quickTitleInput" type="text" placeholder="What happened or needs doing?" required />
+              </label>
+              <label>
+                <span>Time</span>
+                <input id="quickTime" type="time" />
+              </label>
+              <label>
+                <span>Minutes</span>
+                <input id="quickDuration" type="number" min="0" max="1440" step="5" placeholder="45" />
+              </label>
+              <label class="wide">
+                <span>Details</span>
+                <input id="quickNote" type="text" placeholder="Optional detail" />
+              </label>
+              <button class="primary-button wide" type="submit">
+                <svg><use href="#icon-plus"></use></svg>
+                Add to Day
+              </button>
+            </form>
+          </section>
+
+          <section class="tool-panel" id="timeline" aria-labelledby="timelineTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Flow</span>
+                <h2 id="timelineTitle">Timeline</h2>
+              </div>
+            </div>
+            <div class="timeline" id="timelineList"></div>
+          </section>
+
+          <section class="tool-panel" id="tasks" aria-labelledby="taskTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Execution</span>
+                <h2 id="taskTitle">Tasks</h2>
+              </div>
+              <button class="icon-button" id="addTaskButton" type="button" aria-label="Add task" title="Add task">
+                <svg><use href="#icon-plus"></use></svg>
+              </button>
+            </div>
+            <div class="item-list" id="taskList"></div>
+          </section>
+
+          <section class="tool-panel" aria-labelledby="ritualTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Anchors</span>
+                <h2 id="ritualTitle">Daily Rituals</h2>
+              </div>
+            </div>
+            <div class="ritual-grid" id="ritualGrid"></div>
+          </section>
+        </div>
+
+        <div class="content-grid lower-grid">
+          <section class="tool-panel" id="body" aria-labelledby="bodyTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Recovery</span>
+                <h2 id="bodyTitle">Body</h2>
+              </div>
+            </div>
+
+            <form class="sleep-form" id="sleepForm">
+              <label>
+                <span>Bed</span>
+                <input id="sleepBed" type="time" />
+              </label>
+              <label>
+                <span>Wake</span>
+                <input id="sleepWake" type="time" />
+              </label>
+              <label>
+                <span>Quality</span>
+                <input id="sleepQuality" type="range" min="1" max="10" />
+              </label>
+              <button class="secondary-button" type="submit">
+                <svg><use href="#icon-save"></use></svg>
+                Save
+              </button>
+            </form>
+
+            <div class="stack-list">
+              <div class="compact-row">
+                <span><svg><use href="#icon-bed"></use></svg> Sleep</span>
+                <strong id="sleepDetail">Not set</strong>
+              </div>
+              <div class="compact-row">
+                <span><svg><use href="#icon-fork"></use></svg> Meals</span>
+                <strong id="mealDetail">0 logged</strong>
+              </div>
+              <div class="compact-row">
+                <span><svg><use href="#icon-dumbbell"></use></svg> Training</span>
+                <strong id="workoutDetail">0 logged</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="tool-panel" id="focus" aria-labelledby="focusTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Output</span>
+                <h2 id="focusTitle">Study & Work</h2>
+              </div>
+            </div>
+            <div class="item-list" id="focusList"></div>
+          </section>
+
+          <section class="tool-panel" aria-labelledby="measureTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Readings</span>
+                <h2 id="measureTitle">Metrics</h2>
+              </div>
+            </div>
+            <form class="metric-form" id="metricForm">
+              <label>
+                <span>Water</span>
+                <input id="metricWater" type="number" min="0" max="30" />
+              </label>
+              <label>
+                <span>Energy</span>
+                <input id="metricEnergy" type="range" min="1" max="10" />
+              </label>
+              <label>
+                <span>Mood</span>
+                <input id="metricMood" type="range" min="1" max="10" />
+              </label>
+              <label>
+                <span>Steps</span>
+                <input id="metricSteps" type="number" min="0" step="100" />
+              </label>
+              <button class="secondary-button" type="submit">
+                <svg><use href="#icon-save"></use></svg>
+                Save
+              </button>
+            </form>
+          </section>
+
+          <section class="tool-panel" aria-labelledby="activityTitle">
+            <div class="section-header">
+              <div>
+                <span class="eyebrow">Everything Else</span>
+                <h2 id="activityTitle">Activity Log</h2>
+              </div>
+            </div>
+            <div class="item-list" id="activityList"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="capture-dialog" id="captureDialog" aria-labelledby="dialogTitle">
+      <form method="dialog" class="dialog-card">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Capture</span>
+            <h2 id="dialogTitle">Add Entry</h2>
+          </div>
+          <button class="icon-button" type="submit" aria-label="Close" title="Close">x</button>
+        </div>
+        <div class="dialog-grid">
+          <label>
+            <span>Type</span>
+            <select id="dialogType">
+              <option value="task">Task</option>
+              <option value="schedule">Schedule</option>
+              <option value="meal">Meal</option>
+              <option value="workout">Workout</option>
+              <option value="focus">Study / Work</option>
+              <option value="activity">Other Activity</option>
+            </select>
+          </label>
+          <label class="wide">
+            <span>Title</span>
+            <input id="dialogEntryTitle" type="text" />
+          </label>
+          <label>
+            <span>Time</span>
+            <input id="dialogTime" type="time" />
+          </label>
+          <label>
+            <span>Minutes</span>
+            <input id="dialogDuration" type="number" min="0" max="1440" step="5" />
+          </label>
+          <label class="wide">
+            <span>Details</span>
+            <textarea id="dialogNote" rows="3"></textarea>
+          </label>
+        </div>
+        <button class="primary-button" id="dialogSave" value="default" type="button">
+          <svg><use href="#icon-plus"></use></svg>
+          Add Entry
+        </button>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
